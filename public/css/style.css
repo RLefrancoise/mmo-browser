@@ -1,0 +1,28 @@
+canvas {
+	border: 1px solid black;
+	width:640px;
+	height:480px;
+}
+
+#main_div {
+	width: 640px;
+	height: 580px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-320px;
+	margin-top:-290px;
+}
+
+#msgbox {
+	width:640px;
+	height:100px;
+	border:1px solid black;
+	overflow:auto;
+	background-color:black;
+}
+
+#chatbox_input {
+	width:575px;
+	margin-top:1px;
+}

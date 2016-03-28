@@ -1,0 +1,26 @@
+{
+	"login": "Yuki Kazuki",
+	"password": "df5ea29924d39c3be8785734f13169c6",
+	"playerData":
+		{
+			"mapData":
+				{
+					"charset": "Yuki.png",
+					"map": "map1",
+					"position":
+						{
+							"x": 16,
+							"y": 12
+						},
+					"direction": 0
+				},
+			"statsData":
+				{
+					"hp": 40,
+					"max_hp": 50,
+					"fp": 20,
+					"max_fp": 50
+				}
+		},
+	"authorityLevel": 5
+}

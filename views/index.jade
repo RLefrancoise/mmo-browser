@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+	title Golden Sun Land
+	meta(charset='utf-8')
+	
+    link(rel='stylesheet', href='/css/style.css')    
+    
+	script(src='js/jquery-1.11.1.js')
+	script(src='js/Key.js')
+	script(src='js/classes/Tileset.js')
+	script(src='js/classes/Character.js')
+	script(src='js/classes/Map.js')
+	script(src='js/map.js')
+  body
+    
+    div
+      div.inlineBlock
+        span Your name:
+          input(type="text", value="Anonymous")#name
+        br
+        form#messageForm
+          textarea(rows="4", cols="50", placeholder="Share something!", maxlength=200)#outgoingMessage
+          input(type="button", value="Share", disabled=true)#send
+      div.inlineBlock.topAligned
+        b Participants
+        br
+        div#participants
+    div#messages

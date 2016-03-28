@@ -1,0 +1,17 @@
+# config/yaml/Character.dcm.yml
+Character:
+  type: entity
+  table: Character
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+        type: string
+        unique: true
+  manyToOne:
+      account:
+          targetEntity: Account
+          inversedBy: characters

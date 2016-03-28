@@ -1,0 +1,14 @@
+{
+	"events": [
+		{
+			"type": "warp",
+			"trigger": "player_contact",
+			"direction": 1,
+			"data": {
+				"map": "map1",
+				"x": 16,
+				"y": 0,
+				"direction": 0
+			}
+		}]
+}

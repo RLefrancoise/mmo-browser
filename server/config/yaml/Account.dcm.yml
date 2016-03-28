@@ -1,0 +1,36 @@
+# config/yaml/Account.dcm.yml
+Account:
+  type: entity
+  table: Account
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    login:
+      type: string
+      unique: true
+    password:
+        type: string
+    mail:
+        type: string
+        unique: true
+    isLoggedIn:
+        type: boolean
+        options:
+            default: false
+    connectionToken:
+        type: string
+        unique: true
+        nullable: true
+    adminLevel:
+        type: integer
+        options:
+            default: 1
+  oneToMany:
+    characters:
+        targetEntity: Character
+        mappedBy: account
+        onDelete: CASCADE
+        onUpdate: CASCADE
