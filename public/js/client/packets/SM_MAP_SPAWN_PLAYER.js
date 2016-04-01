@@ -1,2 +1,2 @@
 console.log('spawn player');
-spawn_player(this.data.playerdata);
+screen.scene.spawn_player(this.data.playerdata);

@@ -2,7 +2,7 @@ var x = this.data.position.x;
 var y = this.data.position.y;
 var dir = this.data.position.direction;
 
-var c = map.getEntity(this.data.id);
+var c = screen.scene.map.getEntity(this.data.id);
 
 if(c) {
     //check x coordinate, warp player if position is too far than the current position, else move player normally
@@ -11,10 +11,10 @@ if(c) {
         c.direction = dir;
     } else {
         if(x < c.x) {
-            c.deplacer(MapEntity.DIRECTION.LEFT, map);
+            c.deplacer(MapEntity.DIRECTION.LEFT, screen.scene.map);
         }
         if(x > c.x) {
-            c.deplacer(MapEntity.DIRECTION.RIGHT, map);
+            c.deplacer(MapEntity.DIRECTION.RIGHT, screen.scene.map);
         }
     }
 
@@ -24,10 +24,10 @@ if(c) {
         c.direction = dir;
     } else {
         if(y < c.y) {
-            c.deplacer(MapEntity.DIRECTION.UP, map);
+            c.deplacer(MapEntity.DIRECTION.UP, screen.scene.map);
         }
         if(y > c.y) {
-            c.deplacer(MapEntity.DIRECTION.DOWN, map);
+            c.deplacer(MapEntity.DIRECTION.DOWN, screen.scene.map);
         }
     }
 }

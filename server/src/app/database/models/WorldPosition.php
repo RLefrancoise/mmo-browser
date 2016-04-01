@@ -16,7 +16,7 @@ class WorldPosition extends AbstractModel {
      */
     protected $id;
     /**
-     * @OneToOne(targetEntity="WorldZone")
+     * @ManyToOne(targetEntity="WorldZone", cascade={"all"}, fetch="EAGER")
      * @JoinColumn(name="worldZone", referencedColumnName="id")
      */
     protected $worldZone;

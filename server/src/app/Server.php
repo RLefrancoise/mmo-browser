@@ -153,7 +153,8 @@ class Server extends WebSocketServer {
     }
 
     public function addConnectedAccount(Account $account) : self {
-        $this->connectedAccounts[] = $account;
+        $this->connectedAccounts->set($account->getId(), $account);
+        echo $this->connectedAccounts->count() . PHP_EOL;
         return $this;
     }
 
@@ -170,6 +171,7 @@ class Server extends WebSocketServer {
     }
 
     public function removeConnectedAccount(Account $account) {
-        $this->connectedAccounts->removeElement($account);
+        $this->connectedAccounts->remove($account->getId(), $account);
+        echo $this->connectedAccounts->count() . PHP_EOL;
     }
 }

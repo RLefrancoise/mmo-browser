@@ -2,14 +2,17 @@
 
 namespace App\Helpers;
 
+use DateTime;
 use WebSocketUser;
 use App\Server;
 use App\Database\Models\Account;
 use App\Database\Models\Character;
 use App\Network\Packets\Packet;
+use App\Network\Packets\Server\Chat\ServerChatPacket;
 use App\Network\Packets\Server\Login\SM_LOGIN_ERROR;
 use App\Network\Packets\Server\Map\SM_MAP_SELF_SPAWN;
 use App\Network\Packets\Server\Map\SM_MAP_PLAYER_EXITS_MAP;
+use App\Network\Packets\Server\Utils\SM_SERVER_MESSAGE;
 
 class AccountHelper {
     protected $server;
@@ -28,6 +31,14 @@ class AccountHelper {
 
             //spawn character
             Helpers::$MAP_HELPER->selfSpawn($user);
+
+            $sm_server_message = Packet::create(array(
+                'type'  =>  SM_SERVER_MESSAGE::TYPE,
+                'msg'   =>   "Welcome to Exitium. Server time : " . (new Datetime())->format('d/m/Y H:i:s'),
+                'color' =>  ServerChatPacket::MSG_COLOR_SERVER,
+            ));
+            $sm_server_message->doAction($this->server, $user);
+
             /*$sm_map_self_spawn = Packet::create(array(
                 'type'  =>  SM_MAP_SELF_SPAWN::TYPE,
             ));

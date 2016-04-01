@@ -2,6 +2,7 @@ canvas {
 	border: 1px solid black;
 	width:640px;
 	height:480px;
+    cursor: url("../img/cursor2.gif"), crosshair;
 }
 
 #main_div {

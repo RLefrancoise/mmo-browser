@@ -27,7 +27,8 @@ class Character extends AbstractModel {
     protected $name;
 
     /**
-     * @Column(type="string", unique=false, nullable=false)
+     * @OneToOne(targetEntity="Charset")
+     * @JoinColumn(name="charset", referencedColumnName="id", unique=false, nullable=false)
      */
     protected $charset;
 
@@ -39,6 +40,7 @@ class Character extends AbstractModel {
 
     /**
      * @ManyToOne(targetEntity="Account", cascade={"all"}, inversedBy="characters")
+     * @JoinColumn(name="account", referencedColumnName="id")
      */
     protected $account;
 
@@ -55,7 +57,7 @@ class Character extends AbstractModel {
         return array(
             'id'    =>  $this->getId(),
             'name'      =>  $this->getName(),
-            'charset'   =>  $this->getCharset(),
+            'charset'   =>  $this->getCharset()->getFile(),
             'position'  =>  $this->getWorldPosition()->toJSONArray(),
         );
     }

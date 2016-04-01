@@ -1,2 +1,2 @@
 console.log('player exits map');
-map.removeEntity(this.data.id);
+screen.scene.map.removeEntity(this.data.id);

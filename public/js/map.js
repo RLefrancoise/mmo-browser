@@ -170,6 +170,11 @@ function update() {
 	}
 }
 
+function destroy_scene() {
+    map = null;
+    player = null;
+}
+
 function self_spawn(data) {
 	isSpawned = false;
 

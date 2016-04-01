@@ -43,17 +43,17 @@ abstract class Packet {
             throw new LogicException(__FILE__ . ' ' . __LINE__ . ' - Packet::create() : packet without a type.');
         }
 
-        $type = explode('_', $data['type'])[1];
+        //$type = explode('_', $data['type'])[1];
         $packetName = '';
 
-        if(!array_key_exists($type, PacketType::$PACKETS)) {
+        /*if(!array_key_exists($type, PacketType::$PACKETS)) {
             throw new LogicException(__FILE__ . ' ' . __LINE__ . ' - Packet::create() : invalid packet type ' . $type);
-        }
+        }*/
 
-        if(!array_key_exists($data['type'], PacketType::$PACKETS[$type])) {
+        if(!array_key_exists($data['type'], PacketType::$PACKETS)) {
             throw new LogicException(__FILE__ . ' ' . __LINE__ . ' - Packet::create() : ' . $data['type'] . ' is not a valid login packet type.');
         }
-        $packetName = PacketType::$PACKETS[$type][$data['type']];
+        $packetName = PacketType::$PACKETS[$data['type']];
 
         /*switch($type) {
             case PacketType::PACKETTYPE_LOGIN:

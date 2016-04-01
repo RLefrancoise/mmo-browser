@@ -19,8 +19,8 @@ class WorldZone extends AbstractModel {
      */
     protected $name;
     /**
-     * @OneToOne(targetEntity="WorldMap")
-     * @JoinColumn(name="worldMap", referencedColumnName="id")
+     * @ManyToOne(targetEntity="WorldMap", cascade={"all"}, fetch="EAGER")
+     * @JoinColumn(name="worldmap", referencedColumnName="id")
      */
     protected $worldMap;
 
@@ -29,7 +29,7 @@ class WorldZone extends AbstractModel {
             'name'  =>  $this->getName(),
         ));
     }
-    
+
     /**
      * Retrieves the currently set id.
      *

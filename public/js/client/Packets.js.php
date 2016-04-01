@@ -30,17 +30,17 @@ var Packet = Class.create({
 <?php
 
 
-$tmp = array_values(PacketType::$PACKETS);
+$packets_list = PacketType::$PACKETS;
 
 $packets = array();
-foreach($tmp as $packets_list) {
+//foreach($tmp as $packets_list) {
     foreach($packets_list as $type => $packet) {
         $packets[] = array(
             'type'  =>  $type,
             'name'  =>  $packet,
         );
     }
-}
+//}
 
 ?>
 Packet.createFromType = function(data, socket) {
