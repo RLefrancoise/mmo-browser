@@ -4,12 +4,8 @@ var HUD = Class.create({
         this.image = new Image();
         this.image.src = "public/sprites/yuki.png";
     },
-    draw: function(ctx) {
-        //if(this.scene.player) {
-            //ctx.drawImage(this.scene.player.image, 0, 0, this.scene.player.image.width / 4, this.scene.player.image.height / 8, 5, 5, this.scene.player.image.width / 4, this.scene.player.image.width / 8);
-            //ctx.drawImage(this.image, 0, 0, this.image.width / 4, this.image.height / 16, 5 , 5, this.image.width / 4, this.image.height / 16);
-        //}
 
+    _drawPlayerInfo: function(ctx) {
         //draw face
         ctx.beginPath();
         ctx.rect(5, 5, this.image.width / 4, this.image.height / 16);
@@ -66,7 +62,9 @@ var HUD = Class.create({
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 1;
         ctx.stroke();
-
+    },
+    draw: function(ctx) {
+        this._drawPlayerInfo(ctx);
     }
 });
 
