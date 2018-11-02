@@ -25,7 +25,7 @@ class Database {
         $dbParams = array(
             'driver'   => 'pdo_pgsql',
             'user'     => 'postgres',
-            'password' => 'ThOfSh0!',
+            'password' => 'root',
             'dbname'   => 'exitium_rpg',
         );
 
