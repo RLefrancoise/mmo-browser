@@ -24,3 +24,4 @@ It is written in PHP7 for the server. The client uses HTML5 canvas, Socket.io an
 ## Screenshots
 
 ![Screen 1](/docs/screens/screen1.png)
+![Screen 2](docs/screens/screen2.png)
