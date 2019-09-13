@@ -3,5 +3,6 @@
 require_once __DIR__ . "/bootstrap.php";
 
 use App\Database\Database;
+use \Doctrine\ORM\Tools\Console\ConsoleRunner;
 
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(Database::get()->getEntityManager());
+return ConsoleRunner::createHelperSet(Database::get()->getEntityManager());

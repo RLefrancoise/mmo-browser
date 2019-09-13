@@ -1,44 +1,67 @@
 <?php
 
+/**
+ * Charset.php
+ * 
+ * @author Renaud Lefrançoise <renaud.lefrancoise@gmail.com>
+ */
 namespace App\Database\Models;
+
 use App\Database\Models\AbstractModel;
 
 /**
+ * Charset model
+ * 
  * @Entity
  * @Table(name="Charset")
  */
-class Charset extends AbstractModel {
+class Charset extends AbstractModel
+{
 
     /**
+     * Charset ID
+     * 
      * @Id
      * @Column(type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
     /**
+     * Charset name
+     * 
      * @Column(type="string", length=50, unique=true, nullable=false)
      */
     protected $name;
+
     /**
+     * Charset file name
+     * 
      * @Column(type="string", length=50, unique=true, nullable=false)
      */
     protected $file;
+
     /**
+     * Charset is locked ?
+     * 
      * @Column(type="boolean", options={"default":false})
      */
     protected $isLocked;
+
     /**
+     * Charset owner
+     * 
      * @ManyToOne(targetEntity="Account", cascade={"all"}, fetch="EAGER")
-     * @JoinColumn(name="owner", referencedColumnName="id")
+     * @JoinColumn(name="owner",          referencedColumnName="id")
      */
     protected $owner;
 
     /**
      * Retrieves the currently set id.
      *
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -46,90 +69,90 @@ class Charset extends AbstractModel {
     /**
      * Retrieves the currently set file.
      *
-     * @return mixed
+     * @return string
      */
-    public function getFile()
+    public function getFile() : string
     {
         return $this->file;
     }
 
     /**
-     * Sets the file to use.
+     * Sets the charset file name
      *
-     * @param mixed $file
+     * @param string $file The file name of the charset
      *
      * @return $this
      */
-    public function setFile($file): self
+    public function setFile(string $file): self
     {
         $this->file = $file;
         return $this;
     }
 
     /**
-     * Retrieves the currently set isLocked.
+     * Is charset locked ?
      *
-     * @return mixed
+     * @return bool
      */
-    public function getIsLocked()
+    public function getIsLocked() : bool
     {
         return $this->isLocked;
     }
 
     /**
-     * Sets the isLocked to use.
+     * Set charset locked
      *
-     * @param mixed $isLocked
+     * @param bool $isLocked Charset locked flag
      *
      * @return $this
      */
-    public function setIsLocked($isLocked): self
+    public function setIsLocked(bool $isLocked): self
     {
         $this->isLocked = $isLocked;
         return $this;
     }
 
     /**
-     * Retrieves the currently set name.
+     * Get the charset name
      *
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
-     * Sets the name to use.
+     * Sets the charset name
      *
-     * @param mixed $name
+     * @param string $name Name of the charset
      *
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * Retrieves the currently set owner.
+     * Get the charset owner
      *
-     * @return mixed
+     * @return Account|null
      */
-    public function getOwner()
+    public function getOwner() : ?Account
     {
         return $this->owner;
     }
 
     /**
-     * Sets the owner to use.
+     * Sets the charset owner
      *
-     * @param mixed $owner
+     * @param Account $owner Owner of the charset
      *
      * @return $this
      */
-    public function setOwner($owner): self
+    public function setOwner(Account $owner): self
     {
         $this->owner = $owner;
         return $this;

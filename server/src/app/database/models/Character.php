@@ -98,9 +98,9 @@ class Character extends AbstractModel {
     /**
      * Retrieves the currently set worldPosition.
      *
-     * @return mixed
+     * @return WorldPosition|null
      */
-    public function getWorldPosition()
+    public function getWorldPosition() : ?WorldPosition
     {
         return $this->worldPosition;
     }

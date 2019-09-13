@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/../vendor/autoload.php');
+require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../bootstrap.php';
 
 use App\Database\Database;
@@ -10,20 +10,22 @@ $login = $argv[1];
 $pass = $argv[2];
 $mail = $argv[3];
 
-if(empty($login) || empty($pass)) {
+if (empty($login) || empty($pass)) {
     echo "Missing parameter.";
     die;
 }
 
-Database::get()->getEntityManager()->transactional(function($entityManager) {
-    global $login, $pass, $mail;
+Database::get()->getEntityManager()->transactional(
+    function ($entityManager) {
+        global $login, $pass, $mail;
 
-    $account = new Account();
-    $account->setLogin($login);
-    $account->setPassword(md5($pass));
-    $account->setMail($mail);
+        $account = new Account();
+        $account->setLogin($login);
+        $account->setPassword(md5($pass));
+        $account->setMail($mail);
 
-    $account->save();
+        $account->save();
 
-    echo "Created Account with ID " . $account->getId() . "\n";
-});
+        echo "Created Account with ID " . $account->getId() . "\n";
+    }
+);

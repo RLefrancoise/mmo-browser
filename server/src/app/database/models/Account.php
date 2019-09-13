@@ -1,60 +1,108 @@
 <?php
 
+/**
+ * Account.php
+ * 
+ * @author Renaud Lefrançoise <renaud.lefrancoise@gmail.com>
+ */
 namespace App\Database\Models;
 
 use LogicException;
 use App\Database\Models\AbstractModel;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Database\Database;
+use MyCLabs\Enum\Enum;
 
 /**
+ * Admin Level values for an account.
+ * 
+ * @package Database/Models
+ * 
+ * @method static AdminLevel NONE()
+ * @method static AdminLevel USER()
+ * @method static AdminLevel MOD()
+ * @method static AdminLevel SUPER_MOD()
+ * @method static AdminLevel ALL()
+ */
+class AdminLevel extends Enum
+{
+    private const NONE = 0;
+    private const USER = 1;
+    private const MOD = 2;
+    private const SUPER_MOD = 3;
+    private const ALL = 4;
+}
+
+/**
+ * Account model
+ * 
+ * @package Database/Models
+ * 
  * @Entity
  * @Table(name="Account")
  */
-class Account extends AbstractModel {
-
-    const ADMIN_LEVEL_NONE = 0;
-    const ADMIN_LEVEL_USER = 1;
-    const ADMIN_LEVEL_MOD = 2;
-    const ADMIN_LEVEL_SUPER_MOD = 3;
-    const ADMIN_LEVEL_ALL = 4;
-
+class Account extends AbstractModel
+{
     /**
+     * ID of the account.
+     * 
      * @Id
      * @Column(type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
     /**
+     * Login of the account
+     * 
      * @Column(type="string", length=50, unique=true, nullable=false)
      */
     protected $login;
+
     /**
+     * Password MD5 of the account
+     * 
      * @Column(type="string", nullable=false)
      */
     protected $password;
+
     /**
+     * Mail of the account
+     * 
      * @Column(type="string", unique=true, nullable=false)
      */
     protected $mail;
+
     /**
+     * Is logged in ?
+     * 
      * @Column(type="boolean", options={"default":false})
      */
     protected $isLoggedIn;
+
     /**
+     * Connection token of the account
+     * 
      * @Column(type="string", unique=true, nullable=true)
      */
     protected $connectionToken;
+
     /**
+     * Admin level of the account
+     * 
      * @Column(type="integer", nullable=false, options={"default":1})
      */
     protected $adminLevel;
+
     /**
+     * Characters of the account
+     * 
      * @OneToMany(targetEntity="Character", mappedBy="account", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
      */
     protected $characters = null;
 
     /**
+     * Current character of the account
+     * 
      * @OneToOne(targetEntity="Character")
      * @JoinColumn(name="currentCharacter", referencedColumnName="id")
      */
@@ -66,16 +114,28 @@ class Account extends AbstractModel {
         $this->characters = new ArrayCollection();
 
         $this->setIsLoggedIn(false);
-        $this->setAdminLevel(Account::ADMIN_LEVEL_USER);
+        $this->setAdminLevel(AdminLevel::USER());
     }
 
-    public function addCharacter($character) : self
+    /**
+     * Add a character to the account
+     *
+     * @param Character $character The character to add
+     * 
+     * @return self
+     */
+    public function addCharacter(Character $character) : self
     {
         $this->characters[] = $character;
         return $this;
     }
 
-    public function getCharacters()
+    /**
+     * Get the characters of the account
+     *
+     * @return ArrayCollection
+     */
+    public function getCharacters() : ArrayCollection
     {
         return $this->characters;
     }
@@ -83,9 +143,9 @@ class Account extends AbstractModel {
     /**
      * Retrieves the currently set currentCharacter.
      *
-     * @return mixed
+     * @return Character|null
      */
-    public function getCurrentCharacter()
+    public function getCurrentCharacter() : ?Character
     {
         return $this->currentCharacter;
     }
@@ -93,43 +153,66 @@ class Account extends AbstractModel {
     /**
      * Sets the currentCharacter to use.
      *
-     * @param mixed $currentCharacter
+     * @param Character|null $currentCharacter Character to set to the account
      *
      * @return $this
      */
-    public function setCurrentCharacter($currentCharacter): self
+    public function setCurrentCharacter(?Character $currentCharacter): self
     {
         $this->currentCharacter = $currentCharacter;
         return $this;
     }
 
-    public static function getFromLoginPassword($login, $password, $isLoggedIn = false)
+    /**
+     * Get an account from a login and a password
+     *
+     * @param string  $login      The login of the character
+     * @param string  $password   The password of the character
+     * @param boolean $isLoggedIn Should the account be logged in or not ?
+     * 
+     * @return Account|null
+     */
+    public static function getFromLoginPassword(string $login, string $password, bool $isLoggedIn = false) : ?Account
     {
         $search = array(
             'login'         =>      $login,
             'password'      =>      $password,
         );
 
-        if($isLoggedIn) $search['isloggedin'] = 'TRUE';
+        if ($isLoggedIn) $search['isloggedin'] = 'TRUE';
 
         return self::findOneBy($search);
     }
 
-    public static function getFromConnectionToken($token, $isLoggedIn = false)
+    /**
+     * Get an account from a connection token
+     *
+     * @param string  $token      Token of the account
+     * @param boolean $isLoggedIn Should the account be logged in or not ?
+     * 
+     * @return Account|null
+     */
+    public static function getFromConnectionToken(string $token, bool $isLoggedIn = false) : ?Account
     {
         $search = array(
             'connectiontoken'           =>      $token,
         );
 
-        if($isLoggedIn) $search['isloggedin'] = 'TRUE';
+        if ($isLoggedIn) $search['isloggedin'] = 'TRUE';
 
         return self::findOneBy($search);
     }
 
-    public static function logoutAll() {
-        $accounts = self::repository()->findByIsLoggedIn(true);
+    /**
+     * Log out all accounts.
+     *
+     * @return void
+     */
+    public static function logoutAll()
+    {
+        $accounts = Account::repository()->findByIsLoggedIn(true);
 
-        foreach($accounts as $account) {
+        foreach ($accounts as $account) {
             $account->setIsLoggedIn(false);
             $account->setConnectionToken(null);
             $account->save();
@@ -137,44 +220,51 @@ class Account extends AbstractModel {
     }
 
     /**
-    * @param $connectionToken
-    * @return boolean
-    * @throws LogicException
-    */
-    public function login($connectionToken) : bool
+     * Log a user and assign a connection token to the account.
+     * 
+     * @param string $connectionToken The connection token to assign to the account
+     * 
+     * @return bool
+     * @throws LogicException
+     */
+    public function login(string $connectionToken) : bool
     {
-        if($this->getIsLoggedIn()) {
+        if ($this->getIsLoggedIn()) {
             throw new LogicException("Account {$this->getLogin()} (ID: {$this->getId()}) is already logged in.");
         }
 
         $this->setIsLoggedIn(true);
         $this->setConnectionToken($connectionToken);
         $this->save();
-        //Database::get()->save($this);
 
         return true;
     }
 
-    public function logout() : bool
+    /**
+     * Log out an account
+     *
+     * @return $this
+     * @throws LogicException
+     */
+    public function logout() : self
     {
-        if(!$this->getIsLoggedIn()) {
+        if (!$this->getIsLoggedIn()) {
             throw new LogicException("Account {$this->getLogin()} (ID: {$this->getId()}) is already logged out.");
         }
 
         $this->setIsLoggedIn(false);
         $this->setConnectionToken(null);
         $this->save();
-        //Database::get()->save($this);
 
-        return true;
+        return $this;
     }
 
     /**
      * Retrieves the currently set id.
      *
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
@@ -182,9 +272,9 @@ class Account extends AbstractModel {
     /**
      * Retrieves the currently set login.
      *
-     * @return mixed
+     * @return string
      */
-    public function getLogin()
+    public function getLogin() : string
     {
         return $this->login;
     }
@@ -192,11 +282,11 @@ class Account extends AbstractModel {
     /**
      * Sets the login to use.
      *
-     * @param mixed $login
+     * @param string $login The login to set
      *
      * @return $this
      */
-    public function setLogin($login): self
+    public function setLogin(string $login): self
     {
         $this->login = $login;
         return $this;
@@ -205,9 +295,9 @@ class Account extends AbstractModel {
     /**
      * Retrieves the currently set mail.
      *
-     * @return mixed
+     * @return string
      */
-    public function getMail()
+    public function getMail() : string
     {
         return $this->mail;
     }
@@ -215,11 +305,11 @@ class Account extends AbstractModel {
     /**
      * Sets the mail to use.
      *
-     * @param mixed $mail
+     * @param string $mail The mail to set
      *
      * @return $this
      */
-    public function setMail($mail): self
+    public function setMail(string $mail): self
     {
         $this->mail = $mail;
         return $this;
@@ -228,9 +318,9 @@ class Account extends AbstractModel {
     /**
      * Retrieves the currently set password.
      *
-     * @return mixed
+     * @return string
      */
-    public function getPassword()
+    public function getPassword() : string
     {
         return $this->password;
     }
@@ -238,11 +328,11 @@ class Account extends AbstractModel {
     /**
      * Sets the password to use.
      *
-     * @param mixed $password
+     * @param string $password The password to set
      *
      * @return $this
      */
-    public function setPassword($password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
         return $this;
@@ -251,21 +341,21 @@ class Account extends AbstractModel {
     /**
      * Retrieves the currently set isLoggedIn.
      *
-     * @return mixed
+     * @return bool
      */
-    public function getIsLoggedIn()
+    public function getIsLoggedIn() : bool
     {
         return $this->isLoggedIn;
     }
 
     /**
-     * Sets the isLoggedIn to use.
+     * Sets the isLoggedIn flag.
      *
-     * @param mixed $isLoggedIn
+     * @param bool $isLoggedIn Flag value
      *
      * @return $this
      */
-    public function setIsLoggedIn($isLoggedIn): self
+    public function setIsLoggedIn(bool $isLoggedIn): self
     {
         $this->isLoggedIn = $isLoggedIn;
         return $this;
@@ -274,9 +364,9 @@ class Account extends AbstractModel {
     /**
      * Retrieves the currently set connectionToken.
      *
-     * @return mixed
+     * @return string|null
      */
-    public function getConnectionToken()
+    public function getConnectionToken() : ?string
     {
         return $this->connectionToken;
     }
@@ -284,11 +374,11 @@ class Account extends AbstractModel {
     /**
      * Sets the connectionToken to use.
      *
-     * @param mixed $connectionToken
+     * @param string|null $connectionToken The connection token to set
      *
      * @return $this
      */
-    public function setConnectionToken($connectionToken): self
+    public function setConnectionToken(?string $connectionToken): self
     {
         $this->connectionToken = $connectionToken;
         return $this;
@@ -297,33 +387,34 @@ class Account extends AbstractModel {
     /**
      * Retrieves the currently set adminLevel.
      *
-     * @return mixed
+     * @return AdminLevel
      */
-    public function getAdminLevel()
+    public function getAdminLevel() : AdminLevel
     {
         return $this->adminLevel;
     }
 
     /**
-     * Sets the adminLevel to use.
+     * Sets the administration level of the account.
      *
-     * @param mixed $adminLevel
+     * @param AdminLevel $adminLevel The administration level to set
      *
      * @return $this
+     * @throws LogicException
      */
-    public function setAdminLevel($adminLevel): self
+    public function setAdminLevel(AdminLevel $adminLevel): self
     {
         switch($adminLevel) {
-            case Account::ADMIN_LEVEL_NONE:
-            case Account::ADMIN_LEVEL_USER:
-            case Account::ADMIN_LEVEL_MOD:
-            case Account::ADMIN_LEVEL_SUPER_MOD:
-            case Account::ADMIN_LEVEL_ALL:
-                $this->adminLevel = $adminLevel;
-                break;
-            default:
-                throw new LogicException(__FILE__ . " " . __LINE__ . " - invalid adminLevel $adminLevel (accountId : {$this->getId()})");
-                break;
+        case AdminLevel::NONE():
+        case AdminLevel::USER():
+        case AdminLevel::MOD():
+        case AdminLevel::SUPER_MOD():
+        case AdminLevel::ALL():
+            $this->adminLevel = $adminLevel;
+            break;
+        default:
+            throw new LogicException(__FILE__ . " " . __LINE__ . " - invalid adminLevel $adminLevel (accountId : {$this->getId()})");
+            break;
         }
 
         return $this;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <?php
-    require_once (__DIR__ . '/server/vendor/autoload.php');
-    require_once (__DIR__ . '/server/bootstrap.php');
+    require_once __DIR__ . '/server/vendor/autoload.php';
+    require_once __DIR__ . '/server/bootstrap.php';
 ?>
 
 <html>
