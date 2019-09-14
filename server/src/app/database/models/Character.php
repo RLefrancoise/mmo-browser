@@ -3,44 +3,73 @@
 namespace App\Database\Models;
 
 use App\Database\Models\AbstractModel;
+use MyCLabs\Enum\Enum;
 
 /**
+ * Character direction enum
+ * 
+ * @package Database/Models
+ * 
+ * @method static CharacterDirection DOWN()
+ * @method static CharacterDirection LEFT()
+ * @method static CharacterDirection RIGHT()
+ * @method static CharacterDirection UP()
+ */
+class CharacterDirection extends Enum
+{
+    const DOWN = 0;
+    const LEFT = 1;
+    const RIGHT = 2;
+    const UP = 3;
+}
+
+/**
+ * Character model
+ * 
+ * @package Database/Models
+ * 
  * @Entity
  * @Table(name="Character")
  */
-class Character extends AbstractModel {
-
-    const DIRECTION_DOWN = 0;
-    const DIRECTION_LEFT = 1;
-    const DIRECTION_RIGHT = 2;
-    const DIRECTION_UP = 3;
-
+class Character extends AbstractModel
+{
     /**
+     * ID of the character
+     * 
      * @Id
      * @Column(type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
     /**
+     * Name of the character
+     * 
      * @Column(type="string", length=50, unique=true, nullable=false)
      */
     protected $name;
 
     /**
+     * Charset of the character
+     * 
      * @OneToOne(targetEntity="Charset")
-     * @JoinColumn(name="charset", referencedColumnName="id", unique=false, nullable=false)
+     * @JoinColumn(name="charset",       referencedColumnName="id", unique=false, nullable=false)
      */
     protected $charset;
 
     /**
+     * World position of the character
+     * 
      * @OneToOne(targetEntity="WorldPosition")
-     * @JoinColumn(name="worldPosition", referencedColumnName="id")
+     * @JoinColumn(name="worldPosition",       referencedColumnName="id")
      */
     protected $worldPosition;
 
     /**
+     * Account linked to the character
+     * 
      * @ManyToOne(targetEntity="Account", cascade={"all"}, inversedBy="characters")
-     * @JoinColumn(name="account", referencedColumnName="id")
+     * @JoinColumn(name="account",        referencedColumnName="id")
      */
     protected $account;
 
@@ -53,7 +82,13 @@ class Character extends AbstractModel {
         return $s;
     }
 
-    public function toJSONArray() {
+    /**
+     * Get a JSON array from the character
+     *
+     * @return array
+     */
+    public function toJSONArray() : array
+    {
         return array(
             'id'    =>  $this->getId(),
             'name'      =>  $this->getName(),
@@ -63,40 +98,40 @@ class Character extends AbstractModel {
     }
 
     /**
-     * Retrieves the currently set name.
+     * Get name of the character
      *
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
-     * Sets the name to use.
+     * Set the character name
      *
-     * @param mixed $name
+     * @param string $name Name of the character
      *
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * Retrieves the currently set id.
+     * Get the character ID
      *
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
 
     /**
-     * Retrieves the currently set worldPosition.
+     * Get the character world position
      *
      * @return WorldPosition|null
      */
@@ -106,22 +141,22 @@ class Character extends AbstractModel {
     }
 
     /**
-     * Sets the worldPosition to use.
+     * Set the character world position
      *
-     * @param mixed $worldPosition
+     * @param WorldPosition $worldPosition The character world position
      *
      * @return $this
      */
-    public function setWorldPosition($worldPosition): self
+    public function setWorldPosition(WorldPosition $worldPosition): self
     {
         $this->worldPosition = $worldPosition;
         return $this;
     }
 
     /**
-     * Retrieves the currently set account.
+     * Get the account linked to the character
      *
-     * @return mixed
+     * @return Account
      */
     public function getAccount() : Account
     {
@@ -129,9 +164,9 @@ class Character extends AbstractModel {
     }
 
     /**
-     * Sets the account to use.
+     * Sets account linked to the character
      *
-     * @param mixed $account
+     * @param Account $account Account linked to the character
      *
      * @return $this
      */
@@ -142,30 +177,37 @@ class Character extends AbstractModel {
         return $this;
     }
 
-    public function isInSameLocation(Character $c = null) {
-        if($c == null) return false;
-        if($this->getWorldPosition()->getWorldZone()->getId() == $c->getWorldPosition()->getWorldZone()->getId()) return true;
+    /**
+     * Is the character in the same location as the given character ?
+     *
+     * @param Character $c The other character
+     * 
+     * @return bool
+     */
+    public function isInSameLocation(Character $c) : bool
+    {
+        if ($this->getWorldPosition()->getWorldZone()->getId() == $c->getWorldPosition()->getWorldZone()->getId()) return true;
         return false;
     }
 
     /**
-     * Retrieves the currently set charset.
+     * Get the charset of the character
      *
-     * @return mixed
+     * @return Charset|null
      */
-    public function getCharset()
+    public function getCharset() : ?Charset
     {
         return $this->charset;
     }
 
     /**
-     * Sets the charset to use.
+     * Sets the charset of the character
      *
-     * @param mixed $charset
+     * @param Charset $charset The charset of the character
      *
      * @return $this
      */
-    public function setCharset($charset): self
+    public function setCharset(Charset $charset): self
     {
         $this->charset = $charset;
         return $this;

@@ -5,36 +5,60 @@ namespace App\Database\Models;
 use App\Database\Models\AbstractModel;
 
 /**
+ * World Position model
+ * 
+ * @package Database/Models
+ * 
  * @Entity
  * @Table(name="WorldPosition")
  */
-class WorldPosition extends AbstractModel {
+class WorldPosition extends AbstractModel
+{
     /**
+     * World Position ID
+     * 
      * @Id
      * @Column(type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
     /**
+     * World Zone
+     * 
      * @ManyToOne(targetEntity="WorldZone", cascade={"all"}, fetch="EAGER")
-     * @JoinColumn(name="worldZone", referencedColumnName="id")
+     * @JoinColumn(name="worldZone",        referencedColumnName="id")
      */
     protected $worldZone;
 
     /**
+     * X coordinate
+     * 
      * @Column(type="integer", nullable=false, options={"unsigned":true})
      */
     protected $x;
+
     /**
+     * Y coordinate
+     * 
      * @Column(type="integer", nullable=false, options={"unsigned":true})
      */
     protected $y;
+
     /**
+     * Direction
+     * 
      * @Column(type="integer", nullable=false, options={"unsigned":true})
      */
     protected $direction;
 
-    public function toJSONArray() {
+    /**
+     * Get a JSON array from the WorldPosition
+     *
+     * @return array
+     */
+    public function toJSONArray() : array
+    {
         return array(
             'x' =>  $this->getX(),
             'y' =>  $this->getY(),
@@ -43,58 +67,58 @@ class WorldPosition extends AbstractModel {
     }
 
     /**
-     * Retrieves the currently set id.
+     * Get WorldPosition ID
      *
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
 
     /**
-     * Retrieves the currently set worldZone.
+     * Get the world zone linked to the position
      *
-     * @return mixed
+     * @return WorldZone
      */
-    public function getWorldZone()
+    public function getWorldZone() : WorldZone
     {
         return $this->worldZone;
     }
 
     /**
-     * Sets the worldZone to use.
+     * Set the world zone linked to the position
      *
-     * @param mixed $worldZone
+     * @param WorldZone $worldZone World zone linked to the position
      *
      * @return $this
      */
-    public function setWorldZone($worldZone): self
+    public function setWorldZone(WorldZone $worldZone): self
     {
         $this->worldZone = $worldZone;
         return $this;
     }
 
     /**
-     * Retrieves the currently set direction.
+     * Get the world position direction
      *
-     * @return mixed
+     * @return CharacterDirection
      */
-    public function getDirection()
+    public function getDirection() : CharacterDirection
     {
         return $this->direction;
     }
 
     /**
-     * Sets the direction to use.
+     * Set the world position direction
      *
-     * @param mixed $direction
+     * @param CharacterDirection $direction the world position direction
      *
      * @return $this
      */
-    public function setDirection($direction): self
+    public function setDirection(CharacterDirection $direction): self
     {
-        if(self::isValidDirection($direction)) {
+        if (self::isValidDirection($direction)) {
             $this->direction = $direction;
         }
 
@@ -102,57 +126,65 @@ class WorldPosition extends AbstractModel {
     }
 
     /**
-     * Retrieves the currently set x.
+     * Get the X coordinate
      *
-     * @return mixed
+     * @return int
      */
-    public function getX()
+    public function getX() : int
     {
         return $this->x;
     }
 
     /**
-     * Sets the x to use.
+     * Set the X coordinate
      *
-     * @param mixed $x
+     * @param int $x X coordinate
      *
      * @return $this
      */
-    public function setX($x): self
+    public function setX(int $x): self
     {
         $this->x = $x;
         return $this;
     }
 
     /**
-     * Retrieves the currently set y.
+     * Get the Y coordinate
      *
-     * @return mixed
+     * @return int
      */
-    public function getY()
+    public function getY() : int
     {
         return $this->y;
     }
 
     /**
-     * Sets the y to use.
+     * Set the Y coordinate
      *
-     * @param mixed $y
+     * @param int $y Y coordinate
      *
      * @return $this
      */
-    public function setY($y): self
+    public function setY(int $y): self
     {
         $this->y = $y;
         return $this;
     }
 
-    public static function isValidDirection($direction) {
+    /**
+     * Is given direction valid ?
+     *
+     * @param CharacterDirection $direction direction to test
+     * 
+     * @return bool
+     */
+    public static function isValidDirection(CharacterDirection $direction) : bool
+    {
         switch($direction) {
-            case Character::DIRECTION_DOWN:
-            case Character::DIRECTION_LEFT:
-            case Character::DIRECTION_RIGHT:
-            case Character::DIRECTION_UP:
+            case CharacterDirection::DOWN():
+            case CharacterDirection::LEFT():
+            case CharacterDirection::RIGHT():
+            case CharacterDirection::UP():
                 return true;
             default:
                 return false;

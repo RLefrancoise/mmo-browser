@@ -1,55 +1,75 @@
 <?php
+
 namespace App\Database\Models;
+
 use App\Database\Models\AbstractModel;
 
 /**
+ * World Map model
+ * 
+ * @package Database/Models
+ * 
  * @Entity
  * @Table(name="WorldMap")
  */
-class WorldMap extends AbstractModel {
+class WorldMap extends AbstractModel
+{
     /**
+     * ID of the world map
+     * 
      * @Id
      * @Column(type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
     /**
+     * Name of the world map
+     * 
      * @Column(type="string", unique=true, nullable=false)
      */
     protected $name;
 
-    public static function findByName($mapName) {
+    /**
+     * Find a WorldMap by its name
+     *
+     * @param string $mapName name of the map
+     * 
+     * @return WorldMap|null
+     */
+    public static function findByName(string $mapName) : ?WorldMap
+    {
         return self::findOneBy(array('name' =>  $mapName));
     }
 
     /**
-     * Retrieves the currently set id.
+     * Get WorldMap ID
      *
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
 
     /**
-     * Retrieves the currently set name.
+     * Get WorldMap name
      *
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
-     * Sets the name to use.
+     * Set the world map name
      *
-     * @param mixed $name
+     * @param string $name name of the map
      *
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
