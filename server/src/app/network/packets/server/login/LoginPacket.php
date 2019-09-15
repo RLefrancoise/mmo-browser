@@ -6,8 +6,9 @@ use App\Network\Packets\Server\ServerPacket;
 use App\Server;
 use WebSocketUser;
 
-abstract class LoginPacket extends ServerPacket {
-
-    public function doAction(Server $server, WebSocketUser $user, $account = null) {
+abstract class LoginPacket extends ServerPacket
+{
+    public function doAction(Server $server, WebSocketUser $user, $account = null)
+    {
     }
 }

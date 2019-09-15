@@ -1,86 +1,109 @@
 <?php
+
 namespace App\Database\Models;
+
 use App\Server;
 use App\Database\Models\AbstractModel;
 
 /**
+ * WorldZone model
+ * 
+ * @package Database/Models
+ * 
  * @Entity
  * @Table(name="WorldZone")
  */
-class WorldZone extends AbstractModel {
+class WorldZone extends AbstractModel
+{
     /**
+     * World zone ID
+     * 
      * @Id
      * @Column(type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
     /**
+     * World zone name
+     * 
      * @Column(type="string", unique=true, nullable=false)
      */
     protected $name;
+
     /**
+     * World zone map
+     * 
      * @ManyToOne(targetEntity="WorldMap", cascade={"all"}, fetch="EAGER")
-     * @JoinColumn(name="worldmap", referencedColumnName="id")
+     * @JoinColumn(name="worldmap",        referencedColumnName="id")
      */
     protected $worldMap;
 
-    public function getData(Server $server) {
-        return $server->getGameData('map', array(
-            'name'  =>  $this->getName(),
-        ));
+    /**
+     * Get data of the zone
+     *
+     * @param Server $server The game server instance
+     * 
+     * @return void
+     */
+    public function getData(Server $server)
+    {
+        return $server->getGameData(
+            'map', array('name'  =>  $this->getName(),)
+        );
     }
 
     /**
-     * Retrieves the currently set id.
+     * Get WorldZone ID
      *
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId() : int
     {
         return $this->id;
     }
 
     /**
-     * Retrieves the currently set name.
+     * Get the world zone name
      *
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
-     * Sets the name to use.
+     * Set the world zone name
      *
-     * @param mixed $name
+     * @param string $name The name of the zone
      *
      * @return $this
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * Retrieves the currently set worldMap.
+     * Get the world zone map
      *
-     * @return mixed
+     * @return WorldMap
      */
-    public function getWorldMap()
+    public function getWorldMap() : WorldMap
     {
         return $this->worldMap;
     }
 
     /**
-     * Sets the worldMap to use.
+     * Set the world zone map
      *
-     * @param mixed $worldMap
+     * @param WorldMap $worldMap The world zone map
      *
      * @return $this
      */
-    public function setWorldMap($worldMap): self
+    public function setWorldMap(WorldMap $worldMap): self
     {
         $this->worldMap = $worldMap;
         return $this;
